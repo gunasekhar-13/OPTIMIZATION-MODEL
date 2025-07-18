@@ -1,0 +1,19 @@
+!pip install pulp
+
+
+import pulp
+p=pulp.LpProblem("Maximize_Profit", pulp.LpMaximize)
+x=pulp.LpVariable('Product_A', lowBound=0, cat='Integer')
+y=pulp.LpVariable('Product_B', lowBound=0, cat='Integer')
+p+=20*x+30*y,"Total Profit"
+p+=2*x+1*y<=40,"Machine Time Constraint"
+p+=3*x+4*y<=60, "Material Constraint"
+p.solve()
+print("Status:",pulp.LpStatus[p.status])
+print("Produce Units of A:", x.varValue)
+print("Produce Units of B:", y.varValue)
+print("Maximum Profit:$", pulp.value(p.objective))
+
+for v in p.variables():
+    print(v.name, "=", v.varValue)
+print("\nObjective Function = ", pulp.value(p.objective))
